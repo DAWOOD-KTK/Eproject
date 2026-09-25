@@ -6,17 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
-            $table->integer('rating'); // 1-5
-            $table->text('comment')->nullable();
+            $table->string('favoritable_type'); // 'Farmer' or 'Product'
+            $table->unsignedBigInteger('favoritable_id');
             $table->timestamps();
+
+            $table->unique(['customer_id', 'favoritable_type', 'favoritable_id']);
         });
     }
 
     public function down(): void {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('favorites');
     }
 };

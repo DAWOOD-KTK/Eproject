@@ -9,14 +9,16 @@ return new class extends Migration {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('farmer_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->string('category')->default('Vegetables');
             $table->string('name');
-            $table->string('category');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->string('unit'); // kg, dozen, etc.
-            $table->integer('stock_quantity');
+            $table->string('unit')->default('kg'); // kg, bunch, dozen, piece, box, etc.
+            $table->integer('stock_quantity')->default(0);
             $table->string('image')->nullable();
             $table->boolean('is_available')->default(true);
+            $table->boolean('is_weekly_template')->default(false); // Recurring weekly stock
             $table->timestamps();
         });
     }
